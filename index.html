@@ -142,7 +142,6 @@
             padding: 2rem 0;
         }
 
-        /* Modal Styles */
         .modal-content {
             background-color: var(--dark);
             color: var(--light);
@@ -164,7 +163,6 @@
             border-color: var(--gold);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero-image {
                 max-width: 100%;
@@ -193,12 +191,12 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link active" data-section="home">Home</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="my-story">My Story</a></li>
-                    <li class="nav-item"><a class="nav-link" data-section="my-goals">30 Days of BACK</a></li>
-                    <li class="nav-item"><a class="nav-link" data-section="back-up-board">BACK Up Board</a></li>
-                    <li class="nav-item"><a class="nav-link" data-section="skill-swap">Skill Swap</a></li>
-                    <li class="nav-item"><a class="nav-link" data-section="barter-board">Barter Board</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="burn-wall">Burn Wall</a></li>
-                    <li class="nav-item"><a class="nav-link" data-section="leaderboard">Leaderboard</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="my-goals">30 Days of BACK</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="skill-back">Skill BACK</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="switch-back">Switch BACK</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="back-up">BackUP</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="comeback-board">Comeback Board</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="events">Events</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="stats">Stats</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="profile">Profile</a></li>
@@ -260,22 +258,22 @@
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <div class="card-body text-center">
-                                <h5 class="card-title gold-text">🤝 BACK Up Board</h5>
+                                <h5 class="card-title gold-text">🔥 Burn BACK</h5>
                                 <p class="card-text">
-                                    Need a hand? The BACK community has your back. Request support for immediate needs.
+                                    Burn it down. Symbolically burn BACK tokens to express defiance or celebrate a win.
                                 </p>
-                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#createRequestModal">Request Help</button>
+                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#addBurnModal">Burn BACK</button>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <div class="card-body text-center">
-                                <h5 class="card-title gold-text">🔄 Trade Skills</h5>
+                                <h5 class="card-title gold-text">🏆 Comeback Board</h5>
                                 <p class="card-text">
-                                    Swap skills, not cash. The BACK economy runs on mutual respect and hard work.
+                                    See the men who lead by example. The builders, the fighters, the ones who refuse to quit.
                                 </p>
-                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#addSkillModal">Add a Skill</button>
+                                <button class="btn btn-gold mt-3" data-section="comeback-board">View Leaderboard</button>
                             </div>
                         </div>
                     </div>
@@ -340,6 +338,48 @@
             </div>
         </section>
 
+        <!-- Burn Wall Section -->
+        <section id="burn-wall" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">🔥 Burn Wall</h1>
+                <p class="lead fs-5 mb-5">
+                    Sometimes, you just need to burn it all down to rise from the ashes.
+                    Symbolically burn your BACK tokens to express defiance, celebrate a win, or just let go.
+                </p>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addBurnModal">Burn BACK</button>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Recent Burns</h2>
+                <div class="row" id="burnWallGrid">
+                    <!-- Example Burn Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <p class="card-text gold-text fw-bold">"To the job that fired me—watch me rise."</p>
+                                <p class="card-text"><small class="text-muted">By James K. | Burned 100 BACK on June 1, 2026</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <p class="card-text gold-text fw-bold">"For the man I used to be. The new me doesn’t need you."</p>
+                                <p class="card-text"><small class="text-muted">By David M. | Burned 50 BACK on May 30, 2026</small></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <p class="card-text gold-text fw-bold">"This one’s for the doubters. Enjoy the show."</p>
+                                <p class="card-text"><small class="text-muted">By Robert L. | Burned 200 BACK on May 28, 2026</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- 30 Days of BACK Section -->
         <section id="my-goals" class="section">
             <div class="text-center py-4">
@@ -396,10 +436,75 @@
             </div>
         </section>
 
-        <!-- BACK Up Board Section -->
-        <section id="back-up-board" class="section">
+        <!-- Skill BACK Section -->
+        <section id="skill-back" class="section">
             <div class="text-center py-4">
-                <h1 class="display-4 gold-text fw-bold mb-4">🆘 BACK Up Board</h1>
+                <h1 class="display-4 gold-text fw-bold mb-4">🔄 Skill BACK</h1>
+                <p class="lead fs-5 mb-5">
+                    Swap skills, not cash. The BACK economy runs on mutual respect and hard work.
+                    Offer a skill, trade for another, and keep the cycle going.
+                </p>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addSkillModal">Add a Skill</button>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Available Skills</h2>
+                <div class="row" id="skillsGrid">
+                    <!-- Example Skill Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text">Logo Design</h5>
+                                <p class="card-text">
+                                    I’ll design a professional logo for your business or project.
+                                    No shortcuts, just quality work.
+                                </p>
+                                <p class="card-text"><strong class="gold-text">Cost:</strong> 50 BACK</p>
+                                <p class="card-text"><small class="text-muted">By Alex R. | Design</small></p>
+                                <button class="btn btn-outline-gold btn-sm mt-2 w-100">Contact</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Switch BACK Section -->
+        <section id="switch-back" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">🛒 Switch BACK</h1>
+                <p class="lead fs-5 mb-5">
+                    Trade what you have for what you need. No cash, no charity—just fair exchanges between men who value hard work.
+                    List an item or service, and trade it for BACK tokens.
+                </p>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addItemModal">List an Item</button>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Available Items</h2>
+                <div class="row" id="itemsGrid">
+                    <!-- Example Item Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="https://via.placeholder.com/300x200?text=Laptop" class="card-img-top" alt="Item Image">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text">MacBook Pro (2020)</h5>
+                                <p class="card-text">
+                                    Fully functional MacBook Pro. 16GB RAM, 512GB SSD.
+                                    Perfect for work or creative projects.
+                                </p>
+                                <p class="card-text"><strong class="gold-text">Price:</strong> 500 BACK</p>
+                                <p class="card-text"><small class="text-muted">By Mike L. | Electronics</small></p>
+                                <button class="btn btn-outline-gold btn-sm mt-2 w-100">Contact Seller</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BackUP Section -->
+        <section id="back-up" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">🆘 BackUP</h1>
                 <p class="lead fs-5 mb-5">
                     Sometimes, a man just needs a hand to get through the week.
                     Request or donate BACK tokens for immediate, short-term needs.
@@ -455,101 +560,10 @@
             </div>
         </section>
 
-        <!-- Skill Swap Section -->
-        <section id="skill-swap" class="section">
+        <!-- Comeback Board Section -->
+        <section id="comeback-board" class="section">
             <div class="text-center py-4">
-                <h1 class="display-4 gold-text fw-bold mb-4">🔄 Skill Swap</h1>
-                <p class="lead fs-5 mb-5">
-                    Swap skills, not cash. The BACK economy runs on mutual respect and hard work.
-                    Offer a skill, trade for another, and keep the cycle going.
-                </p>
-                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addSkillModal">Add a Skill</button>
-            </div>
-            <div class="py-4">
-                <h2 class="text-center gold-text mb-5">Available Skills</h2>
-                <div class="row" id="skillsGrid">
-                    <!-- Example Skill Card -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title gold-text">Logo Design</h5>
-                                <p class="card-text">
-                                    I’ll design a professional logo for your business or project.
-                                    No shortcuts, just quality work.
-                                </p>
-                                <p class="card-text"><strong class="gold-text">Cost:</strong> 50 BACK</p>
-                                <p class="card-text"><small class="text-muted">By Alex R. | Design</small></p>
-                                <button class="btn btn-outline-gold btn-sm mt-2 w-100">Contact</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Barter Board Section -->
-        <section id="barter-board" class="section">
-            <div class="text-center py-4">
-                <h1 class="display-4 gold-text fw-bold mb-4">🛒 Barter Board</h1>
-                <p class="lead fs-5 mb-5">
-                    Trade what you have for what you need. No cash, no charity—just fair exchanges between men who value hard work.
-                    List an item or service, and trade it for BACK tokens.
-                </p>
-                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addItemModal">List an Item</button>
-            </div>
-            <div class="py-4">
-                <h2 class="text-center gold-text mb-5">Available Items</h2>
-                <div class="row" id="itemsGrid">
-                    <!-- Example Item Card -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <img src="https://via.placeholder.com/300x200?text=Laptop" class="card-img-top" alt="Item Image">
-                            <div class="card-body">
-                                <h5 class="card-title gold-text">MacBook Pro (2020)</h5>
-                                <p class="card-text">
-                                    Fully functional MacBook Pro. 16GB RAM, 512GB SSD.
-                                    Perfect for work or creative projects.
-                                </p>
-                                <p class="card-text"><strong class="gold-text">Price:</strong> 500 BACK</p>
-                                <p class="card-text"><small class="text-muted">By Mike L. | Electronics</small></p>
-                                <button class="btn btn-outline-gold btn-sm mt-2 w-100">Contact Seller</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Burn Wall Section -->
-        <section id="burn-wall" class="section">
-            <div class="text-center py-4">
-                <h1 class="display-4 gold-text fw-bold mb-4">🔥 Burn Wall</h1>
-                <p class="lead fs-5 mb-5">
-                    Sometimes, you just need to burn it all down to rise from the ashes.
-                    Symbolically burn your BACK tokens to express defiance, celebrate a win, or just let go.
-                </p>
-                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addBurnModal">Burn BACK</button>
-            </div>
-            <div class="py-4">
-                <h2 class="text-center gold-text mb-5">Recent Burns</h2>
-                <div class="row" id="burnWallGrid">
-                    <!-- Example Burn Card -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <p class="card-text gold-text fw-bold">"To the job that fired me—watch me rise."</p>
-                                <p class="card-text"><small class="text-muted">By James K. | Burned 100 BACK on June 1, 2026</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Leaderboard Section -->
-        <section id="leaderboard" class="section">
-            <div class="text-center py-4">
-                <h1 class="display-4 gold-text fw-bold mb-4">🏆 Leaderboard</h1>
+                <h1 class="display-4 gold-text fw-bold mb-4">🏆 Comeback Board</h1>
                 <p class="lead fs-5 mb-5">
                     The men who lead by example. These are the builders, the fighters, the ones who refuse to quit.
                     Respect the grind.
@@ -594,7 +608,7 @@
         <!-- Events Section -->
         <section id="events" class="section">
             <div class="text-center py-4">
-                <h1 class="display-4 gold-text fw-bold mb-4">📅 BACK Events</h1>
+                <h1 class="display-4 gold-text fw-bold mb-4">📅 Events</h1>
                 <p class="lead fs-5 mb-5">
                     Join the community. Share your knowledge. Learn from others.
                     These are the gatherings of men who refuse to quit.
@@ -664,7 +678,7 @@
         <!-- Profile Section -->
         <section id="profile" class="section">
             <div class="text-center py-4">
-                <h1 class="display-4 gold-text fw-bold mb-4">👤 Your Profile</h1>
+                <h1 class="display-4 gold-text fw-bold mb-4">👤 Profile</h1>
                 <p class="lead fs-5 mb-5">
                     This is your space. Your story. Your value.
                 </p>
