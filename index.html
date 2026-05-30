@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>\$BACK - The Token for Act II</title>
+    <title>$BACK - The Token for Act II</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* BACKChain Lite - Custom Styles */
         :root {
             --gold: #d4af37;
             --gold-light: #f5f5dc;
@@ -24,7 +23,6 @@
             background-color: var(--black);
             color: var(--light);
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
         .gold-text {
@@ -44,7 +42,6 @@
         .btn-gold:hover {
             background-color: #b8941f;
             color: var(--black);
-            transform: translateY(-2px);
         }
 
         .btn-outline-gold {
@@ -64,9 +61,6 @@
         .navbar {
             padding: 1rem 0;
             font-family: 'Oswald', sans-serif;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
             background-color: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(5px);
         }
@@ -74,15 +68,10 @@
         .navbar-nav .nav-link {
             color: var(--light) !important;
             font-weight: 500;
-            transition: color 0.3s;
             cursor: pointer;
         }
 
         .navbar-nav .nav-link:hover {
-            color: var(--gold) !important;
-        }
-
-        .navbar-nav .nav-link.active {
             color: var(--gold) !important;
         }
 
@@ -101,7 +90,967 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero-section {
-            background: linear-gradient(rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.8)),
-                        url('https://via.placeholder.com/1920x600?text=BACK+Hero+Image') no-repeat center center;
-            background-size:
+        .card {
+            background-color: var(--dark);
+            border: 1px solid var(--gold-dark);
+            transition: all 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .stat-card {
+            padding: 1.5rem;
+            border: 1px solid var(--gold-dark);
+            border-radius: 5px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .stat-card:hover {
+            border-color: var(--gold);
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+
+        .hero-image {
+            max-width: 500px;
+            border: 3px solid var(--gold);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .progress {
+            height: 10px;
+            background-color: var(--dark);
+        }
+
+        .progress-bar {
+            background-color: var(--gold);
+        }
+
+        .badge {
+            background-color: var(--gold);
+            color: var(--black);
+        }
+
+        footer {
+            border-top: 1px solid var(--gold-dark);
+            margin-top: 4rem;
+            padding: 2rem 0;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+
+        .modal-header, .modal-footer {
+            border-color: var(--gold-dark);
+        }
+
+        .form-control, .form-select {
+            background-color: var(--dark);
+            color: var(--light);
+            border: 1px solid var(--gold-dark);
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--dark);
+            color: var(--light);
+            border-color: var(--gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-image {
+                max-width: 100%;
+            }
+            .display-4 {
+                font-size: 2.5rem;
+            }
+            .lead {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://via.placeholder.com/40x40?text=$BACK" alt="$BACK Logo" height="40" class="me-2">
+                <span class="fw-bold gold-text">$BACK</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" data-section="home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="my-story">My Story</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="my-goals">30 Days of BACK</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="back-up-board">BACK Up Board</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="skill-swap">Skill Swap</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="barter-board">Barter Board</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="burn-wall">Burn Wall</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="leaderboard">Leaderboard</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="events">Events</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="stats">Stats</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="profile">Profile</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link gold-text fw-bold" href="#" id="loginBtn">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="text-center py-5">
+                <img src="https://via.placeholder.com/500x300?text=Hands+Holding+$BACK+Coin" alt="Hands holding $BACK coin" class="hero-image mb-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">$BACK: The Token for Act II.</h1>
+                <p class="lead fs-5 mb-5">
+                    Your comeback starts here.
+                </p>
+                <p class="fs-5 lh-lg mb-5">
+                    $BACK is the official token of the second act. It was built for the men who have been handed a raw deal.
+                    The ones who lost the house. The ones the company showed the door. The ones who looked in the mirror
+                    one morning and decided they still had one more round left in them.
+                </p>
+                <p class="fs-5 lh-lg mb-5">
+                    This isn't a coin chasing hype cycles. It's a community of builders who understand that real value
+                    isn't given. It's <span class="gold-text fw-bold">reclaimed</span>. Slowly. Deliberately. Together.
+                </p>
+                <p class="fs-5 lh-lg mb-5">
+                    The contract itself reflects this philosophy. Loyalty is rewarded. Short-term greed is penalized.
+                    $BACK is built for the patient, not the predatory.
+                </p>
+                <p class="fs-5 lh-lg mb-5">
+                    $BACK is the quiet vote of confidence from men who have walked the same road.
+                </p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <button class="btn btn-gold btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#shareStoryModal">Share Your Story</button>
+                    <button class="btn btn-outline-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#createRequestModal">Request Help</button>
+                </div>
+            </div>
+
+            <!-- Featured Sections -->
+            <div class="py-5">
+                <h2 class="text-center gold-text mb-5">Reclaim Your Value</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">📖 Share Your Story</h5>
+                                <p class="card-text">
+                                    Tell the world how you fought back. Every story is a testament to resilience.
+                                </p>
+                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#shareStoryModal">Write Your Story</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">🤝 BACK Up Board</h5>
+                                <p class="card-text">
+                                    Need a hand? The BACK community has your back. Request support for immediate needs.
+                                </p>
+                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#createRequestModal">Request Help</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">🔄 Trade Skills</h5>
+                                <p class="card-text">
+                                    Swap skills, not cash. The BACK economy runs on mutual respect and hard work.
+                                </p>
+                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#addSkillModal">Add a Skill</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="py-5 bg-dark">
+                <h2 class="text-center gold-text mb-5">The BACK Community</h2>
+                <div class="row text-center">
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text">10,000</h3>
+                            <p>Total BACK in Circulation</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text">500+</h3>
+                            <p>Stories of Resilience</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text">1,000+</h3>
+                            <p>Men Who Refuse to Quit</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text">5,000+</h3>
+                            <p>BACK Donated</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Story Section -->
+        <section id="my-story" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">📖 My Story</h1>
+                <p class="lead fs-5 mb-5">
+                    Every man has a story. This is where you tell yours. No judgment. No pity. Just respect.
+                </p>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#shareStoryModal">Share Your Story</button>
+            </div>
+            <div class="row" id="storiesGrid">
+                <!-- Example Story Card -->
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title gold-text">The Day I Lost Everything</h5>
+                            <p class="card-text">
+                                I woke up with nothing. No job, no home, no hope. But I had one thing left: my pride.
+                                And that was enough to start rebuilding.
+                            </p>
+                            <p class="card-text"><small class="text-muted">By John D. | Career</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 30 Days of BACK Section -->
+        <section id="my-goals" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">🎯 30 Days of BACK</h1>
+                <p class="lead fs-5 mb-5">
+                    Prove to yourself—and the world—that you’re still in the fight.
+                    Complete challenges, earn BACK, and reclaim your value.
+                </p>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Active Challenges</h2>
+                <div class="row" id="challengesGrid">
+                    <!-- Example Challenge Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">Learn a New Skill</h5>
+                                <p class="card-text">
+                                    Spend 1 hour daily learning a new skill for 30 days.
+                                    No shortcuts. No excuses.
+                                </p>
+                                <p class="card-text"><strong class="gold-text">Reward:</strong> 50 BACK + Resilience Badge</p>
+                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#joinChallengeModal">Join Challenge</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">Meditate Daily</h5>
+                                <p class="card-text">
+                                    Clear your mind. 10 minutes every day for 30 days.
+                                    Discipline starts here.
+                                </p>
+                                <p class="card-text"><strong class="gold-text">Reward:</strong> 30 BACK + Mindfulness Badge</p>
+                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#joinChallengeModal">Join Challenge</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">Volunteer 10 Hours</h5>
+                                <p class="card-text">
+                                    Give back to your community. 10 hours of volunteer work.
+                                    Real men lift others up.
+                                </p>
+                                <p class="card-text"><strong class="gold-text">Reward:</strong> 100 BACK + Hero Badge</p>
+                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#joinChallengeModal">Join Challenge</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BACK Up Board Section -->
+        <section id="back-up-board" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">🆘 BACK Up Board</h1>
+                <p class="lead fs-5 mb-5">
+                    Sometimes, a man just needs a hand to get through the week.
+                    Request or donate BACK tokens for immediate, short-term needs.
+                    No questions asked—just solidarity.
+                </p>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#createRequestModal">Request Help</button>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Immediate Needs</h2>
+                <div class="row" id="requestsGrid">
+                    <!-- Example Request Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title gold-text mb-0">Rent Due in 3 Days</h5>
+                                    <span class="badge">Urgent</span>
+                                </div>
+                                <p class="card-text">
+                                    Fell short this month. Need 300 BACK to cover rent and avoid eviction.
+                                    Will pay it forward when I’m back on my feet.
+                                </p>
+                                <div class="d-flex justify-content-between text-small mb-3">
+                                    <span><strong class="gold-text">Needed:</strong> 300 BACK</span>
+                                    <span><strong class="gold-text">Raised:</strong> 150 BACK</span>
+                                </div>
+                                <p class="card-text"><small class="text-muted">By Tom H. | 3 days left</small></p>
+                                <button class="btn btn-outline-gold btn-sm mt-2 w-100">Donate BACK</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title gold-text mb-0">Groceries for the Week</h5>
+                                    <span class="badge">Urgent</span>
+                                </div>
+                                <p class="card-text">
+                                    Lost my job last week. Need 100 BACK to feed my family until I find new work.
+                                    Any help is appreciated.
+                                </p>
+                                <div class="d-flex justify-content-between text-small mb-3">
+                                    <span><strong class="gold-text">Needed:</strong> 100 BACK</span>
+                                    <span><strong class="gold-text">Raised:</strong> 75 BACK</span>
+                                </div>
+                                <p class="card-text"><small class="text-muted">By Mike R. | 5 days left</small></p>
+                                <button class="btn btn-outline-gold btn-sm mt-2 w-100">Donate BACK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skill Swap Section -->
+        <section id="skill-swap" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">🔄 Skill Swap</h1>
+                <p class="lead fs-5 mb-5">
+                    Swap skills, not cash. The BACK economy runs on mutual respect and hard work.
+                    Offer a skill, trade for another, and keep the cycle going.
+                </p>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addSkillModal">Add a Skill</button>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Available Skills</h2>
+                <div class="row" id="skillsGrid">
+                    <!-- Example Skill Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text">Logo Design</h5>
+                                <p class="card-text">
+                                    I’ll design a professional logo for your business or project.
+                                    No shortcuts, just quality work.
+                                </p>
+                                <p class="card-text"><strong class="gold-text">Cost:</strong> 50 BACK</p>
+                                <p class="card-text"><small class="text-muted">By Alex R. | Design</small></p>
+                                <button class="btn btn-outline-gold btn-sm mt-2 w-100">Contact</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Barter Board Section -->
+        <section id="barter-board" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">🛒 Barter Board</h1>
+                <p class="lead fs-5 mb-5">
+                    Trade what you have for what you need. No cash, no charity—just fair exchanges between men who value hard work.
+                    List an item or service, and trade it for BACK tokens.
+                </p>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addItemModal">List an Item</button>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Available Items</h2>
+                <div class="row" id="itemsGrid">
+                    <!-- Example Item Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="https://via.placeholder.com/300x200?text=Laptop" class="card-img-top" alt="Item Image">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text">MacBook Pro (2020)</h5>
+                                <p class="card-text">
+                                    Fully functional MacBook Pro. 16GB RAM, 512GB SSD.
+                                    Perfect for work or creative projects.
+                                </p>
+                                <p class="card-text"><strong class="gold-text">Price:</strong> 500 BACK</p>
+                                <p class="card-text"><small class="text-muted">By Mike L. | Electronics</small></p>
+                                <button class="btn btn-outline-gold btn-sm mt-2 w-100">Contact Seller</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Burn Wall Section -->
+        <section id="burn-wall" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">🔥 Burn Wall</h1>
+                <p class="lead fs-5 mb-5">
+                    Sometimes, you just need to burn it all down to rise from the ashes.
+                    Symbolically burn your BACK tokens to express defiance, celebrate a win, or just let go.
+                </p>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addBurnModal">Burn BACK</button>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Recent Burns</h2>
+                <div class="row" id="burnWallGrid">
+                    <!-- Example Burn Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <p class="card-text gold-text fw-bold">"To the job that fired me—watch me rise."</p>
+                                <p class="card-text"><small class="text-muted">By James K. | Burned 100 BACK on June 1, 2026</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard Section -->
+        <section id="leaderboard" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">🏆 Leaderboard</h1>
+                <p class="lead fs-5 mb-5">
+                    The men who lead by example. These are the builders, the fighters, the ones who refuse to quit.
+                    Respect the grind.
+                </p>
+            </div>
+            <div class="py-4">
+                <div class="table-responsive">
+                    <table class="table table-dark table-bordered border-gold">
+                        <thead>
+                            <tr class="bg-black">
+                                <th scope="col" class="gold-text">Rank</th>
+                                <th scope="col" class="gold-text">Username</th>
+                                <th scope="col" class="gold-text">BACK Balance</th>
+                                <th scope="col" class="gold-text">Badges</th>
+                                <th scope="col" class="gold-text">Stories</th>
+                                <th scope="col" class="gold-text">Donations</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardTable">
+                            <tr>
+                                <td class="gold-text">1</td>
+                                <td>John D.</td>
+                                <td class="gold-text">1,200</td>
+                                <td>5</td>
+                                <td>3</td>
+                                <td class="gold-text">500</td>
+                            </tr>
+                            <tr>
+                                <td class="gold-text">2</td>
+                                <td>Mike L.</td>
+                                <td class="gold-text">950</td>
+                                <td>4</td>
+                                <td>2</td>
+                                <td class="gold-text">300</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">📅 BACK Events</h1>
+                <p class="lead fs-5 mb-5">
+                    Join the community. Share your knowledge. Learn from others.
+                    These are the gatherings of men who refuse to quit.
+                </p>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Upcoming Events</h2>
+                <div class="row" id="eventsGrid">
+                    <!-- Example Event Card -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">Community AMA</h5>
+                                <p class="card-text">
+                                    Join our monthly AMA with the BACKChain Lite team.
+                                    Ask questions, share ideas, and connect with the community.
+                                </p>
+                                <p class="card-text"><strong class="gold-text">Date:</strong> June 15, 2026</p>
+                                <p class="card-text"><strong class="gold-text">Time:</strong> 7:00 PM CET</p>
+                                <button class="btn btn-gold mt-3">RSVP</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section id="stats" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">📊 BACK Community Stats</h1>
+                <p class="lead fs-5 mb-5">
+                    The numbers don’t lie. This is the growth of a community that refuses to quit.
+                    Every story, every BACK, every badge—it all adds up.
+                </p>
+            </div>
+            <div class="py-4">
+                <div class="row text-center">
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text">10,000</h3>
+                            <p>Total BACK in Circulation</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text">500+</h3>
+                            <p>Stories of Resilience</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text">1,000+</h3>
+                            <p>Men Who Refuse to Quit</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text">5,000+</h3>
+                            <p>BACK Donated</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">👤 Your Profile</h1>
+                <p class="lead fs-5 mb-5">
+                    This is your space. Your story. Your value.
+                </p>
+            </div>
+            <div class="py-4">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <img src="https://via.placeholder.com/150" class="rounded-circle mb-3 border border-gold" alt="Profile Picture">
+                                <h3 class="gold-text mb-3" id="profileUsername">Guest</h3>
+                                <p class="text-muted mb-4" id="profileBio">Share your bio here. Let the community know who you are.</p>
+                                <div class="row text-center mb-4">
+                                    <div class="col-md-4">
+                                        <h5 class="gold-text">BACK Balance</h5>
+                                        <p id="profileBackBalance">0</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5 class="gold-text">Badges</h5>
+                                        <p id="profileBadgesCount">0</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h5 class="gold-text">Stories</h5>
+                                        <p id="profileStoriesCount">0</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text mb-4">Your Stories</h5>
+                                <ul class="list-group list-group-flush" id="profileStoriesList">
+                                    <li class="list-group-item bg-dark text-light border-gold">No stories yet.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text mb-4">Your Badges</h5>
+                                <div class="row" id="profileBadgesList">
+                                    <p class="text-muted">No badges yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-4">
+        <div class="container text-center">
+            <p class="mb-2">$BACK: The Token for Act II.</p>
+            <p class="text-muted small mb-0">
+                $BACK is a community token with no monetary value. This platform is for entertainment and community-building purposes only.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Share Story Modal -->
+    <div class="modal fade" id="shareStoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-gold">
+                    <h5 class="modal-title gold-text">Share Your Story</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="storyForm">
+                        <div class="mb-3">
+                            <label for="storyTitle" class="form-label gold-text">Title</label>
+                            <input type="text" class="form-control" id="storyTitle" placeholder="e.g., The Day I Fought Back" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="storyDescription" class="form-label gold-text">Your Story</label>
+                            <textarea class="form-control" id="storyDescription" rows="5" placeholder="Tell your story here..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="storyCategory" class="form-label gold-text">Category</label>
+                            <select class="form-select" id="storyCategory" required>
+                                <option value="" disabled selected>Select a category</option>
+                                <option value="Career">Career</option>
+                                <option value="Health">Health</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Personal">Personal</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-gold">
+                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gold" id="submitStoryBtn">Submit Story</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Request Modal -->
+    <div class="modal fade" id="createRequestModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-gold">
+                    <h5 class="modal-title gold-text">Request Help</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="requestForm">
+                        <div class="mb-3">
+                            <label for="requestTitle" class="form-label gold-text">Title</label>
+                            <input type="text" class="form-control" id="requestTitle" placeholder="e.g., Rent Due in 3 Days" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="requestDescription" class="form-label gold-text">Description</label>
+                            <textarea class="form-control" id="requestDescription" rows="5" placeholder="Explain your immediate need..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="requestGoal" class="form-label gold-text">BACK Needed</label>
+                            <input type="number" class="form-control" id="requestGoal" placeholder="e.g., 300" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="requestUrgency" class="form-label gold-text">Urgency</label>
+                            <select class="form-select" id="requestUrgency" required>
+                                <option value="Urgent">Urgent (1-7 days)</option>
+                                <option value="High">High (1-2 weeks)</option>
+                                <option value="Medium">Medium (2-4 weeks)</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-gold">
+                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gold" id="submitRequestBtn">Submit Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Skill Modal -->
+    <div class="modal fade" id="addSkillModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-gold">
+                    <h5 class="modal-title gold-text">Add a Skill</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="skillForm">
+                        <div class="mb-3">
+                            <label for="skillTitle" class="form-label gold-text">Title</label>
+                            <input type="text" class="form-control" id="skillTitle" placeholder="e.g., Logo Design" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="skillDescription" class="form-label gold-text">Description</label>
+                            <textarea class="form-control" id="skillDescription" rows="5" placeholder="Describe what you offer..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="skillCost" class="form-label gold-text">BACK Cost</label>
+                            <input type="number" class="form-control" id="skillCost" placeholder="e.g., 50" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="skillCategory" class="form-label gold-text">Category</label>
+                            <select class="form-select" id="skillCategory" required>
+                                <option value="" disabled selected>Select a category</option>
+                                <option value="Design">Design</option>
+                                <option value="Coding">Coding</option>
+                                <option value="Writing">Writing</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-gold">
+                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gold" id="submitSkillBtn">Submit Skill</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div class="modal fade" id="addItemModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-gold">
+                    <h5 class="modal-title gold-text">List an Item</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="itemForm">
+                        <div class="mb-3">
+                            <label for="itemTitle" class="form-label gold-text">Title</label>
+                            <input type="text" class="form-control" id="itemTitle" placeholder="e.g., MacBook Pro (2020)" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="itemDescription" class="form-label gold-text">Description</label>
+                            <textarea class="form-control" id="itemDescription" rows="5" placeholder="Describe your item..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="itemPrice" class="form-label gold-text">BACK Price</label>
+                            <input type="number" class="form-control" id="itemPrice" placeholder="e.g., 500" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="itemCategory" class="form-label gold-text">Category</label>
+                            <select class="form-select" id="itemCategory" required>
+                                <option value="" disabled selected>Select a category</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Tools">Tools</option>
+                                <option value="Books">Books</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="itemImage" class="form-label gold-text">Image URL (Optional)</label>
+                            <input type="url" class="form-control" id="itemImage" placeholder="e.g., https://example.com/image.jpg">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-gold">
+                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gold" id="submitItemBtn">List Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Burn Modal -->
+    <div class="modal fade" id="addBurnModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-gold">
+                    <h5 class="modal-title gold-text">Burn BACK</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="burnForm">
+                        <div class="mb-3">
+                            <label for="burnMessage" class="form-label gold-text">Message</label>
+                            <textarea class="form-control" id="burnMessage" rows="5" placeholder="What do you want to say with this burn?" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="burnAmount" class="form-label gold-text">BACK Amount</label>
+                            <input type="number" class="form-control" id="burnAmount" placeholder="e.g., 100" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-gold">
+                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gold" id="submitBurnBtn">Burn BACK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-gold">
+                    <h5 class="modal-title gold-text">Edit Profile</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="profileForm">
+                        <div class="mb-3">
+                            <label for="editUsername" class="form-label gold-text">Username</label>
+                            <input type="text" class="form-control" id="editUsername" placeholder="e.g., JohnD" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editBio" class="form-label gold-text">Bio</label>
+                            <textarea class="form-control" id="editBio" rows="5" placeholder="Tell the community about yourself..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-gold">
+                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gold" id="saveProfileBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Join Challenge Modal -->
+    <div class="modal fade" id="joinChallengeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-gold">
+                    <h5 class="modal-title gold-text">Join Challenge</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to join this challenge? Once joined, you can track your progress and earn rewards upon completion.</p>
+                </div>
+                <div class="modal-footer border-top border-gold">
+                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-gold" id="confirmJoinChallengeBtn">Join Challenge</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Section Navigation
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('[data-section]');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetSection = link.getAttribute('data-section');
+
+                    // Hide all sections
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+
+                    // Show target section
+                    document.getElementById(targetSection).classList.add('active');
+
+                    // Update active nav link
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('active');
+                    });
+                    link.classList.add('active');
+
+                    // Scroll to top of the section
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+
+            // Modal Form Submissions (for demo purposes)
+            document.getElementById('submitStoryBtn').addEventListener('click', () => {
+                alert('Story submitted! (Demo)');
+                document.getElementById('storyForm').reset();
+                document.querySelector('#shareStoryModal .btn-close').click();
+            });
+
+            document.getElementById('submitRequestBtn').addEventListener('click', () => {
+                alert('Request submitted! (Demo)');
+                document.getElementById('requestForm').reset();
+                document.querySelector('#createRequestModal .btn-close').click();
+            });
+
+            document.getElementById('submitSkillBtn').addEventListener('click', () => {
+                alert('Skill added! (Demo)');
+                document.getElementById('skillForm').reset();
+                document.querySelector('#addSkillModal .btn-close').click();
+            });
+
+            document.getElementById('submitItemBtn').addEventListener('click', () => {
+                alert('Item listed! (Demo)');
+                document.getElementById('itemForm').reset();
+                document.querySelector('#addItemModal .btn-close').click();
+            });
+
+            document.getElementById('submitBurnBtn').addEventListener('click', () => {
+                alert('BACK burned! (Demo)');
+                document.getElementById('burnForm').reset();
+                document.querySelector('#addBurnModal .btn-close').click();
+            });
+
+            document.getElementById('saveProfileBtn').addEventListener('click', () => {
+                const username = document.getElementById('editUsername').value;
+                const bio = document.getElementById('editBio').value;
+                document.getElementById('profileUsername').textContent = username || 'Guest';
+                document.getElementById('profileBio').textContent = bio || 'Share your bio here. Let the community know who you are.';
+                document.getElementById('profileForm').reset();
+                document.querySelector('#editProfileModal .btn-close').click();
+            });
+
+            document.getElementById('confirmJoinChallengeBtn').addEventListener('click', () => {
+                alert('Challenge joined! (Demo)');
+                document.querySelector('#joinChallengeModal .btn-close').click();
+            });
+        });
+    </script>
+</body>
+</html>
