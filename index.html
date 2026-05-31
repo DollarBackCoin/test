@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --gold: #d4af37;
@@ -129,15 +130,6 @@
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
         }
 
-        .progress {
-            height: 10px;
-            background-color: var(--dark);
-        }
-
-        .progress-bar {
-            background-color: var(--gold);
-        }
-
         .badge {
             background-color: var(--gold);
             color: var(--black);
@@ -170,6 +162,65 @@
             border-color: var(--gold);
         }
 
+        /* Wallet Integration */
+        .wallet-section {
+            background-color: var(--dark);
+            border: 1px solid var(--gold-dark);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .wallet-address {
+            font-family: monospace;
+            word-break: break-all;
+            color: var(--gold-light);
+        }
+
+        /* Messaging System */
+        .messages-container {
+            max-height: 400px;
+            overflow-y: auto;
+            background-color: var(--dark);
+            border: 1px solid var(--gold-dark);
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 5px;
+            background-color: rgba(212, 175, 55, 0.1);
+        }
+
+        .message.sent {
+            background-color: rgba(212, 175, 55, 0.2);
+            margin-left: 20%;
+        }
+
+        .message.received {
+            background-color: rgba(212, 175, 55, 0.1);
+            margin-right: 20%;
+        }
+
+        .message-meta {
+            font-size: 0.8rem;
+            color: var(--gold-light);
+            margin-top: 0.25rem;
+        }
+
+        /* Challenge Cards */
+        .challenge-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .challenge-card:hover {
+            transform: scale(1.02);
+        }
+
         @media (max-width: 768px) {
             .hero-image {
                 max-width: 100%;
@@ -179,6 +230,10 @@
             }
             .lead {
                 font-size: 1.2rem;
+            }
+            .message.sent, .message.received {
+                margin-left: 0;
+                margin-right: 0;
             }
         }
     </style>
@@ -199,18 +254,25 @@
                     <li class="nav-item"><a class="nav-link active" data-section="home">Home</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="my-story">My Story</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="burn-wall">Burn Wall</a></li>
-                    <li class="nav-item"><a class="nav-link" data-section="my-goals">30 Days of BACK</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="back-in-30">BACK in 30 Days</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="skill-back">Skill BACK</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="switch-back">Switch BACK</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="back-up">BackUP</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="back-to-school">Back to School</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="community-fund">Community Fund</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="comeback-board">Comeback Board</a></li>
+                    <li class="nav-item"><a class="nav-link" data-section="messages">Messages <span class="badge bg-gold text-black ms-1" id="unreadMessages">0</span></a></li>
                     <li class="nav-item"><a class="nav-link" data-section="events">Events</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="stats">Stats</a></li>
                     <li class="nav-item"><a class="nav-link" data-section="profile">Profile</a></li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link gold-text fw-bold" href="#" id="loginBtn">Login</a></li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-gold ms-2" id="connectWalletBtn">
+                            <i class="fab fa-solana me-1"></i> Connect Solana Wallet
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -244,7 +306,16 @@
                 </p>
                 <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                     <button class="btn btn-gold btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#shareStoryModal">Share Your Story</button>
-                    <button class="btn btn-outline-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#createRequestModal">Request Help</button>
+                    <button class="btn btn-outline-gold btn-lg px-4" data-section="back-in-30">Join a Challenge</button>
+                </div>
+            </div>
+
+            <!-- Wallet Section -->
+            <div class="wallet-section text-center">
+                <h3 class="gold-text mb-3">Your Solana Wallet</h3>
+                <p class="mb-3">Connect your wallet to view your $BACK token balance and interact with the community.</p>
+                <div id="walletInfo" class="text-muted">
+                    <p>Wallet not connected.</p>
                 </div>
             </div>
 
@@ -277,11 +348,11 @@
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
                             <div class="card-body text-center">
-                                <h5 class="card-title gold-text">🎓 Back to School</h5>
+                                <h5 class="card-title gold-text">🎓 BACK eBooks</h5>
                                 <p class="card-text">
-                                    Sell or buy courses on fitness, food, medicine, coding, and more. Pay with BACK tokens.
+                                    Learn from BACK's official eBooks on fitness, food, job applications, and more.
                                 </p>
-                                <button class="btn btn-gold mt-3" data-section="back-to-school">Explore Courses</button>
+                                <button class="btn btn-gold mt-3" data-section="back-to-school">Browse eBooks</button>
                             </div>
                         </div>
                     </div>
@@ -294,26 +365,26 @@
                 <div class="row text-center">
                     <div class="col-md-3 mb-4">
                         <div class="stat-card">
-                            <h3 class="gold-text">10,000</h3>
+                            <h3 class="gold-text" id="totalBack">10,000</h3>
                             <p>Total BACK in Circulation</p>
                         </div>
                     </div>
                     <div class="col-md-3 mb-4">
                         <div class="stat-card">
-                            <h3 class="gold-text">500+</h3>
+                            <h3 class="gold-text" id="totalStories">500+</h3>
                             <p>Stories of Resilience</p>
                         </div>
                     </div>
                     <div class="col-md-3 mb-4">
                         <div class="stat-card">
-                            <h3 class="gold-text">1,000+</h3>
+                            <h3 class="gold-text" id="totalUsers">1,000+</h3>
                             <p>Men Who Refuse to Quit</p>
                         </div>
                     </div>
                     <div class="col-md-3 mb-4">
                         <div class="stat-card">
-                            <h3 class="gold-text">5,000+</h3>
-                            <p>BACK Donated</p>
+                            <h3 class="gold-text" id="totalDonations">5,000+</h3>
+                            <p>BACK Donated to Community Fund</p>
                         </div>
                     </div>
                 </div>
@@ -352,58 +423,102 @@
             </div>
         </section>
 
-        <!-- 30 Days of BACK Section -->
-        <section id="my-goals" class="section">
+        <!-- BACK in 30 Days Section -->
+        <section id="back-in-30" class="section">
             <div class="text-center py-4">
-                <h1 class="display-4 gold-text fw-bold mb-4">🎯 30 Days of BACK</h1>
+                <h1 class="display-4 gold-text fw-bold mb-4">🎯 BACK in 30 Days</h1>
                 <p class="lead fs-5 mb-5">
                     Prove to yourself—and the world—that you’re still in the fight.
-                    Complete challenges, earn BACK, and reclaim your value.
+                    Join or create a 30-day challenge, earn BACK tokens, and reclaim your value.
                 </p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+                    <button class="btn btn-gold btn-lg px-4 me-sm-3" data-bs-toggle="modal" data-bs-target="#createChallengeModal">Create a Challenge</button>
+                    <button class="btn btn-outline-gold btn-lg px-4" id="showAllChallengesBtn">Browse All Challenges</button>
+                </div>
             </div>
             <div class="py-4">
-                <h2 class="text-center gold-text mb-5">Active Challenges</h2>
+                <h2 class="text-center gold-text mb-5">Featured Challenges</h2>
                 <div class="row" id="challengesGrid">
-                    <!-- Challenges will be loaded here (static for now) -->
+                    <!-- Pre-made Challenges -->
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100">
+                        <div class="card h-100 challenge-card" data-challenge-id="fitness-30">
                             <div class="card-body text-center">
-                                <h5 class="card-title gold-text">Learn a New Skill</h5>
+                                <h5 class="card-title gold-text">30 Days of Fitness</h5>
+                                <p class="card-text">
+                                    Work out for 30 minutes every day for 30 days.
+                                    Earn <strong class="gold-text">100 BACK</strong> + a Fitness Badge.
+                                </p>
+                                <button class="btn btn-gold mt-3 join-challenge-btn">Join Challenge</button>
+                                <button class="btn btn-outline-gold mt-2 w-100 message-author-btn" data-author="BACK Team">Message Creator</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 challenge-card" data-challenge-id="learning-30">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">30 Days of Learning</h5>
                                 <p class="card-text">
                                     Spend 1 hour daily learning a new skill for 30 days.
-                                    No shortcuts. No excuses.
+                                    Earn <strong class="gold-text">100 BACK</strong> + a Learning Badge.
                                 </p>
-                                <p class="card-text"><strong class="gold-text">Reward:</strong> 50 BACK + Resilience Badge</p>
-                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#joinChallengeModal">Join Challenge</button>
+                                <button class="btn btn-gold mt-3 join-challenge-btn">Join Challenge</button>
+                                <button class="btn btn-outline-gold mt-2 w-100 message-author-btn" data-author="BACK Team">Message Creator</button>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100">
+                        <div class="card h-100 challenge-card" data-challenge-id="gratitude-30">
                             <div class="card-body text-center">
-                                <h5 class="card-title gold-text">Meditate Daily</h5>
+                                <h5 class="card-title gold-text">30 Days of Gratitude</h5>
                                 <p class="card-text">
-                                    Clear your mind. 10 minutes every day for 30 days.
-                                    Discipline starts here.
+                                    Write down 3 things you're grateful for every day for 30 days.
+                                    Earn <strong class="gold-text">100 BACK</strong> + a Gratitude Badge.
                                 </p>
-                                <p class="card-text"><strong class="gold-text">Reward:</strong> 30 BACK + Mindfulness Badge</p>
-                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#joinChallengeModal">Join Challenge</button>
+                                <button class="btn btn-gold mt-3 join-challenge-btn">Join Challenge</button>
+                                <button class="btn btn-outline-gold mt-2 w-100 message-author-btn" data-author="BACK Team">Message Creator</button>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4 mb-4">
-                        <div class="card h-100">
+                        <div class="card h-100 challenge-card" data-challenge-id="cold-showers-30">
                             <div class="card-body text-center">
-                                <h5 class="card-title gold-text">Volunteer 10 Hours</h5>
+                                <h5 class="card-title gold-text">30 Days of Cold Showers</h5>
                                 <p class="card-text">
-                                    Give back to your community. 10 hours of volunteer work.
-                                    Real men lift others up.
+                                    End your shower with 30 seconds of cold water every day for 30 days.
+                                    Earn <strong class="gold-text">100 BACK</strong> + a Discipline Badge.
                                 </p>
-                                <p class="card-text"><strong class="gold-text">Reward:</strong> 100 BACK + Hero Badge</p>
-                                <button class="btn btn-gold mt-3" data-bs-toggle="modal" data-bs-target="#joinChallengeModal">Join Challenge</button>
+                                <button class="btn btn-gold mt-3 join-challenge-btn">Join Challenge</button>
+                                <button class="btn btn-outline-gold mt-2 w-100 message-author-btn" data-author="BACK Team">Message Creator</button>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 challenge-card" data-challenge-id="no-alcohol-30">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">30 Days of No Alcohol</h5>
+                                <p class="card-text">
+                                    Give up alcohol for 30 days.
+                                    Earn <strong class="gold-text">150 BACK</strong> + a Clarity Badge.
+                                </p>
+                                <button class="btn btn-gold mt-3 join-challenge-btn">Join Challenge</button>
+                                <button class="btn btn-outline-gold mt-2 w-100 message-author-btn" data-author="BACK Team">Message Creator</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 challenge-card" data-challenge-id="meditation-30">
+                            <div class="card-body text-center">
+                                <h5 class="card-title gold-text">30 Days of Meditation</h5>
+                                <p class="card-text">
+                                    Meditate for 10 minutes every day for 30 days.
+                                    Earn <strong class="gold-text">100 BACK</strong> + a Mindfulness Badge.
+                                </p>
+                                <button class="btn btn-gold mt-3 join-challenge-btn">Join Challenge</button>
+                                <button class="btn btn-outline-gold mt-2 w-100 message-author-btn" data-author="BACK Team">Message Creator</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Custom challenges will be loaded here via Firebase -->
                 </div>
             </div>
         </section>
@@ -413,15 +528,15 @@
             <div class="text-center py-4">
                 <h1 class="display-4 gold-text fw-bold mb-4">🔄 Skill BACK</h1>
                 <p class="lead fs-5 mb-5">
-                    Swap skills, not cash. The BACK economy runs on mutual respect and hard work.
-                    Offer a skill, trade for another, and keep the cycle going.
+                    Post an ad for your skills or services. It costs <strong class="gold-text">10 BACK</strong> to post.
+                    Payment is handled offline in fiat between you and the buyer.
                 </p>
-                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addSkillModal">Add a Skill</button>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addSkillModal">Post a Skill Ad</button>
             </div>
             <div class="py-4">
-                <h2 class="text-center gold-text mb-5">Available Skills</h2>
+                <h2 class="text-center gold-text mb-5">Skill Ads</h2>
                 <div class="row" id="skillsGrid">
-                    <!-- Skills will be loaded here via Firebase -->
+                    <!-- Skill ads will be loaded here via Firebase -->
                 </div>
             </div>
         </section>
@@ -431,15 +546,15 @@
             <div class="text-center py-4">
                 <h1 class="display-4 gold-text fw-bold mb-4">🛒 Switch BACK</h1>
                 <p class="lead fs-5 mb-5">
-                    Trade what you have for what you need. No cash, no charity—just fair exchanges between men who value hard work.
-                    List an item or service, and trade it for BACK tokens.
+                    Post an ad for items you want to trade. It costs <strong class="gold-text">10 BACK</strong> to post.
+                    Payment is handled offline in fiat between you and the buyer.
                 </p>
-                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addItemModal">List an Item</button>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addItemModal">Post an Item Ad</button>
             </div>
             <div class="py-4">
-                <h2 class="text-center gold-text mb-5">Available Items</h2>
+                <h2 class="text-center gold-text mb-5">Item Ads</h2>
                 <div class="row" id="itemsGrid">
-                    <!-- Items will be loaded here via Firebase -->
+                    <!-- Item ads will be loaded here via Firebase -->
                 </div>
             </div>
         </section>
@@ -449,14 +564,13 @@
             <div class="text-center py-4">
                 <h1 class="display-4 gold-text fw-bold mb-4">🆘 BackUP</h1>
                 <p class="lead fs-5 mb-5">
-                    Sometimes, a man just needs a hand to get through the week.
-                    Request or donate BACK tokens for immediate, short-term needs.
-                    No questions asked—just solidarity.
+                    Post a request for help. It costs <strong class="gold-text">5 BACK</strong> to post.
+                    Payment is handled offline in fiat between you and the donor.
                 </p>
-                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#createRequestModal">Request Help</button>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#createRequestModal">Post a Request</button>
             </div>
             <div class="py-4">
-                <h2 class="text-center gold-text mb-5">Immediate Needs</h2>
+                <h2 class="text-center gold-text mb-5">Help Requests</h2>
                 <div class="row" id="requestsGrid">
                     <!-- Requests will be loaded here via Firebase -->
                 </div>
@@ -468,26 +582,126 @@
             <div class="text-center py-4">
                 <h1 class="display-4 gold-text fw-bold mb-4">🎓 Back to School</h1>
                 <p class="lead fs-5 mb-5">
-                    Knowledge is power. Sell or buy courses on fitness, food, medicine, coding, and more.
-                    Pay with BACK tokens—no middlemen, no fees. Just pure learning.
+                    Official BACK eBooks on fitness, food, job applications, and more.
+                    Pay with BACK tokens and download instantly.
                 </p>
-                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#addCourseModal">
-                    Sell a Course
-                </button>
             </div>
             <div class="py-4">
-                <h2 class="text-center gold-text mb-5">Available Courses</h2>
-                <!-- Category Filter Buttons -->
-                <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
-                    <button class="btn btn-outline-gold active" data-filter="all">All</button>
-                    <button class="btn btn-outline-gold" data-filter="Fitness">Fitness</button>
-                    <button class="btn btn-outline-gold" data-filter="Food">Food</button>
-                    <button class="btn btn-outline-gold" data-filter="Medicine">Medicine</button>
-                    <button class="btn btn-outline-gold" data-filter="Coding">Coding</button>
-                    <button class="btn btn-outline-gold" data-filter="Other">Other</button>
+                <h2 class="text-center gold-text mb-5">Official BACK eBooks</h2>
+                <div class="row" id="ebooksGrid">
+                    <!-- Example eBook Cards -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="https://via.placeholder.com/300x200?text=Fitness+eBook" class="card-img-top" alt="Fitness eBook" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text">30-Day Fitness Plan</h5>
+                                <p class="card-text">
+                                    A complete 30-day fitness plan to transform your body.
+                                    Includes workouts, meal plans, and progress tracking.
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="gold-text fw-bold">Price: 50 BACK</span>
+                                    <button class="btn btn-gold btn-sm">Buy Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="https://via.placeholder.com/300x200?text=Food+eBook" class="card-img-top" alt="Food eBook" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text">Healthy Meal Prep Guide</h5>
+                                <p class="card-text">
+                                    Learn how to prep healthy meals for the week.
+                                    Includes recipes, shopping lists, and nutrition tips.
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="gold-text fw-bold">Price: 40 BACK</span>
+                                    <button class="btn btn-gold btn-sm">Buy Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="https://via.placeholder.com/300x200?text=Job+eBook" class="card-img-top" alt="Job eBook" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text">Job Application Mastery</h5>
+                                <p class="card-text">
+                                    Master the art of job applications, resumes, and interviews.
+                                    Land your dream job with these proven strategies.
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="gold-text fw-bold">Price: 60 BACK</span>
+                                    <button class="btn btn-gold btn-sm">Buy Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="row" id="coursesGrid">
-                    <!-- Courses will be loaded here via Firebase -->
+            </div>
+        </section>
+
+        <!-- Community Fund Section -->
+        <section id="community-fund" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">💰 Community Fund</h1>
+                <p class="lead fs-5 mb-5">
+                    Donate BACK tokens to the community fund. Each year, BACK will dedicate the funds to projects
+                    that align with our mission: helping men reclaim their value.
+                </p>
+                <button class="btn btn-gold btn-lg px-4" data-bs-toggle="modal" data-bs-target="#donateModal">Donate to Fund</button>
+            </div>
+            <div class="py-4">
+                <h2 class="text-center gold-text mb-5">Fund Stats</h2>
+                <div class="row text-center">
+                    <div class="col-md-6 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text" id="fundBalance">2,500</h3>
+                            <p>Total BACK in Community Fund</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="stat-card">
+                            <h3 class="gold-text" id="fundDonors">150</h3>
+                            <p>Donors This Month</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="py-4">
+                    <h3 class="gold-text mb-4">Past Projects</h3>
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title gold-text">2025: Men's Shelter Support</h5>
+                                    <p class="card-text">
+                                        Donated 5,000 BACK to a local men's shelter to provide food and housing for those in need.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title gold-text">2024: Job Training Program</h5>
+                                    <p class="card-text">
+                                        Funded a job training program for 50 men to help them re-enter the workforce.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title gold-text">2023: Mental Health Initiative</h5>
+                                    <p class="card-text">
+                                        Partnered with a mental health organization to provide free counseling for men in crisis.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -518,6 +732,46 @@
                             <!-- Leaderboard data will be loaded here via Firebase -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Messages Section -->
+        <section id="messages" class="section">
+            <div class="text-center py-4">
+                <h1 class="display-4 gold-text fw-bold mb-4">💬 Messages</h1>
+                <p class="lead fs-5 mb-5">
+                    Communicate with other users about ads, challenges, or requests.
+                </p>
+            </div>
+            <div class="py-4">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text mb-4">Conversations</h5>
+                                <div class="list-group list-group-flush" id="conversationsList">
+                                    <p class="text-muted">No conversations yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text mb-4">Messages</h5>
+                                <div class="messages-container" id="messagesContainer">
+                                    <p class="text-muted">Select a conversation to view messages.</p>
+                                </div>
+                                <form id="messageForm" class="mt-3">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="messageInput" placeholder="Type your message..." required>
+                                        <button type="submit" class="btn btn-gold" id="sendMessageBtn">Send</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -585,7 +839,7 @@
                     <div class="col-md-3 mb-4">
                         <div class="stat-card">
                             <h3 class="gold-text">5,000+</h3>
-                            <p>BACK Donated</p>
+                            <p>BACK Donated to Community Fund</p>
                         </div>
                     </div>
                 </div>
@@ -649,6 +903,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="row mt-4">
+                    <div class="col-md-12 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title gold-text mb-4">Your Challenges</h5>
+                                <div class="row" id="profileChallengesList">
+                                    <p class="text-muted">No challenges joined yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -659,6 +925,7 @@
             <p class="mb-2">$BACK: The Token for Act II.</p>
             <p class="text-muted small mb-0">
                 $BACK is a community token with no monetary value. This platform is for entertainment and community-building purposes only.
+                All transactions are handled offline between users. BACK is not responsible for any agreements made between users.
             </p>
         </div>
     </footer>
@@ -696,7 +963,7 @@
                 </div>
                 <div class="modal-footer border-top border-gold">
                     <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-gold" id="submitStoryBtn">Submit Story</button>
+                    <button type="button" class="btn btn-gold" id="submitStoryBtn">Submit Story (Free)</button>
                 </div>
             </div>
         </div>
@@ -707,22 +974,18 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom border-gold">
-                    <h5 class="modal-title gold-text">Request Help</h5>
+                    <h5 class="modal-title gold-text">Post a Request</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="requestForm">
                         <div class="mb-3">
                             <label for="requestTitle" class="form-label gold-text">Title</label>
-                            <input type="text" class="form-control" id="requestTitle" placeholder="e.g., Rent Due in 3 Days" required>
+                            <input type="text" class="form-control" id="requestTitle" placeholder="e.g., Need Help with Rent" required>
                         </div>
                         <div class="mb-3">
                             <label for="requestDescription" class="form-label gold-text">Description</label>
-                            <textarea class="form-control" id="requestDescription" rows="5" placeholder="Explain your immediate need..." required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="requestGoal" class="form-label gold-text">BACK Needed</label>
-                            <input type="number" class="form-control" id="requestGoal" placeholder="e.g., 300" required>
+                            <textarea class="form-control" id="requestDescription" rows="5" placeholder="Explain your situation..." required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="requestUrgency" class="form-label gold-text">Urgency</label>
@@ -732,11 +995,14 @@
                                 <option value="Medium">Medium (2-4 weeks)</option>
                             </select>
                         </div>
+                        <div class="alert alert-warning">
+                            Posting this request costs <strong>5 BACK</strong>. Payment for help is handled offline in fiat.
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer border-top border-gold">
                     <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-gold" id="submitRequestBtn">Submit Request</button>
+                    <button type="button" class="btn btn-gold" id="submitRequestBtn">Post Request (5 BACK)</button>
                 </div>
             </div>
         </div>
@@ -747,7 +1013,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom border-gold">
-                    <h5 class="modal-title gold-text">Add a Skill</h5>
+                    <h5 class="modal-title gold-text">Post a Skill Ad</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -758,11 +1024,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="skillDescription" class="form-label gold-text">Description</label>
-                            <textarea class="form-control" id="skillDescription" rows="5" placeholder="Describe what you offer..." required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="skillCost" class="form-label gold-text">BACK Cost</label>
-                            <input type="number" class="form-control" id="skillCost" placeholder="e.g., 50" required>
+                            <textarea class="form-control" id="skillDescription" rows="5" placeholder="Describe your skill or service..." required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="skillCategory" class="form-label gold-text">Category</label>
@@ -774,11 +1036,14 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
+                        <div class="alert alert-warning">
+                            Posting this ad costs <strong>10 BACK</strong>. Payment for services is handled offline in fiat.
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer border-top border-gold">
                     <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-gold" id="submitSkillBtn">Submit Skill</button>
+                    <button type="button" class="btn btn-gold" id="submitSkillBtn">Post Ad (10 BACK)</button>
                 </div>
             </div>
         </div>
@@ -789,7 +1054,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom border-gold">
-                    <h5 class="modal-title gold-text">List an Item</h5>
+                    <h5 class="modal-title gold-text">Post an Item Ad</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -801,10 +1066,6 @@
                         <div class="mb-3">
                             <label for="itemDescription" class="form-label gold-text">Description</label>
                             <textarea class="form-control" id="itemDescription" rows="5" placeholder="Describe your item..." required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="itemPrice" class="form-label gold-text">BACK Price</label>
-                            <input type="number" class="form-control" id="itemPrice" placeholder="e.g., 500" required>
                         </div>
                         <div class="mb-3">
                             <label for="itemCategory" class="form-label gold-text">Category</label>
@@ -820,11 +1081,53 @@
                             <label for="itemImage" class="form-label gold-text">Image URL (Optional)</label>
                             <input type="url" class="form-control" id="itemImage" placeholder="e.g., https://example.com/image.jpg">
                         </div>
+                        <div class="alert alert-warning">
+                            Posting this ad costs <strong>10 BACK</strong>. Payment for items is handled offline in fiat.
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer border-top border-gold">
                     <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-gold" id="submitItemBtn">List Item</button>
+                    <button type="button" class="btn btn-gold" id="submitItemBtn">Post Ad (10 BACK)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Challenge Modal -->
+    <div class="modal fade" id="createChallengeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-gold">
+                    <h5 class="modal-title gold-text">Create a Challenge</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="challengeForm">
+                        <div class="mb-3">
+                            <label for="challengeTitle" class="form-label gold-text">Challenge Title</label>
+                            <input type="text" class="form-control" id="challengeTitle" placeholder="e.g., 30 Days of No Sugar" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="challengeDescription" class="form-label gold-text">Description</label>
+                            <textarea class="form-control" id="challengeDescription" rows="5" placeholder="Describe your challenge..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="challengeReward" class="form-label gold-text">BACK Reward</label>
+                            <input type="number" class="form-control" id="challengeReward" placeholder="e.g., 100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="challengeBadge" class="form-label gold-text">Badge Name</label>
+                            <input type="text" class="form-control" id="challengeBadge" placeholder="e.g., Sugar-Free Badge" required>
+                        </div>
+                        <div class="alert alert-info">
+                            Creating a challenge is free. Rewards are distributed manually upon completion.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-gold">
+                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-gold" id="submitChallengeBtn">Create Challenge</button>
                 </div>
             </div>
         </div>
@@ -858,52 +1161,32 @@
         </div>
     </div>
 
-    <!-- Add Course Modal (Back to School) -->
-    <div class="modal fade" id="addCourseModal" tabindex="-1" aria-hidden="true">
+    <!-- Donate to Community Fund Modal -->
+    <div class="modal fade" id="donateModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-bottom border-gold">
-                    <h5 class="modal-title gold-text">Sell a Course</h5>
+                    <h5 class="modal-title gold-text">Donate to Community Fund</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="courseForm">
+                    <form id="donateForm">
                         <div class="mb-3">
-                            <label for="courseTitle" class="form-label gold-text">Course Title</label>
-                            <input type="text" class="form-control" id="courseTitle" placeholder="e.g., 30-Day Fitness Challenge" required>
+                            <label for="donateAmount" class="form-label gold-text">BACK Amount</label>
+                            <input type="number" class="form-control" id="donateAmount" placeholder="e.g., 100" required>
                         </div>
                         <div class="mb-3">
-                            <label for="courseDescription" class="form-label gold-text">Description</label>
-                            <textarea class="form-control" id="courseDescription" rows="5" placeholder="Describe your course and what students will learn..." required></textarea>
+                            <label for="donateMessage" class="form-label gold-text">Message (Optional)</label>
+                            <textarea class="form-control" id="donateMessage" rows="3" placeholder="Why are you donating?"></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label for="coursePrice" class="form-label gold-text">BACK Price</label>
-                            <input type="number" class="form-control" id="coursePrice" placeholder="e.g., 200" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="courseCategory" class="form-label gold-text">Category</label>
-                            <select class="form-select" id="courseCategory" required>
-                                <option value="" disabled selected>Select a category</option>
-                                <option value="Fitness">Fitness</option>
-                                <option value="Food">Food</option>
-                                <option value="Medicine">Medicine</option>
-                                <option value="Coding">Coding</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="courseImage" class="form-label gold-text">Image URL (Optional)</label>
-                            <input type="url" class="form-control" id="courseImage" placeholder="e.g., https://example.com/image.jpg">
-                        </div>
-                        <div class="mb-3">
-                            <label for="courseDuration" class="form-label gold-text">Duration (Optional)</label>
-                            <input type="text" class="form-control" id="courseDuration" placeholder="e.g., 4 Weeks">
+                        <div class="alert alert-info">
+                            Your donation will go to the BACK Community Fund and be used for projects that help men reclaim their value.
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer border-top border-gold">
                     <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-gold" id="submitCourseBtn">Sell Course</button>
+                    <button type="button" class="btn btn-gold" id="submitDonateBtn">Donate BACK</button>
                 </div>
             </div>
         </div>
@@ -937,29 +1220,14 @@
         </div>
     </div>
 
-    <!-- Join Challenge Modal -->
-    <div class="modal fade" id="joinChallengeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header border-bottom border-gold">
-                    <h5 class="modal-title gold-text">Join Challenge</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to join this challenge? Once joined, you can track your progress and earn rewards upon completion.</p>
-                </div>
-                <div class="modal-footer border-top border-gold">
-                    <button type="button" class="btn btn-outline-gold" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-gold" id="confirmJoinChallengeBtn">Join Challenge</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <!-- Solana Web3 SDK -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    <!-- Phantom Wallet SDK -->
+    <script src="https://unpkg.com/@phantom/wallet-adapter@latest/dist/phantom-wallet-adapter.js"></script>
 
     <!-- Firebase Config (Replace with your own) -->
     <script>
@@ -974,6 +1242,54 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
+
+        // Solana Wallet Integration
+        let wallet;
+        let publicKey;
+        let backTokenBalance = 0;
+
+        async function connectWallet() {
+            if (window.solana && window.solana.isPhantom) {
+                try {
+                    wallet = window.solana;
+                    const response = await wallet.connect();
+                    publicKey = new solanaWeb3.PublicKey(response.publicKey.toString());
+                    document.getElementById('walletInfo').innerHTML = `
+                        <p><strong class="gold-text">Connected Wallet:</strong></p>
+                        <p class="wallet-address">${publicKey.toString()}</p>
+                        <p class="mt-2"><strong class="gold-text">BACK Balance:</strong> <span id="backBalance">Loading...</span></p>
+                    `;
+                    // Simulate fetching BACK token balance (in a real app, you'd call the blockchain)
+                    backTokenBalance = 100; // Demo value
+                    document.getElementById('backBalance').textContent = `${backTokenBalance} BACK`;
+                    alert(`Wallet connected! Address: ${publicKey.toString()}`);
+                } catch (error) {
+                    console.error('Error connecting wallet: ', error);
+                    alert('Error connecting wallet. Please try again.');
+                }
+            } else if (window.solana) {
+                alert('Phantom wallet not found. Please install Phantom or use a supported Solana wallet.');
+            } else {
+                alert('Solana wallet not detected. Please install Phantom, Brave, or Solflare.');
+            }
+        }
+
+        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+
+        // Check if wallet is already connected
+        window.addEventListener('load', async () => {
+            if (window.solana && window.solana.isConnected) {
+                wallet = window.solana;
+                publicKey = new solanaWeb3.PublicKey(window.solana.publicKey.toString());
+                document.getElementById('walletInfo').innerHTML = `
+                    <p><strong class="gold-text">Connected Wallet:</strong></p>
+                    <p class="wallet-address">${publicKey.toString()}</p>
+                    <p class="mt-2"><strong class="gold-text">BACK Balance:</strong> <span id="backBalance">Loading...</span></p>
+                `;
+                backTokenBalance = 100; // Demo value
+                document.getElementById('backBalance').textContent = `${backTokenBalance} BACK`;
+            }
+        });
     </script>
 
     <!-- Bootstrap JS -->
@@ -1004,8 +1320,9 @@
             loadSkills();
             loadItems();
             loadRequests();
-            loadCourses();
+            loadChallenges();
             loadLeaderboard();
+            loadMessages();
 
             // Check if user is logged in
             auth.onAuthStateChanged((user) => {
@@ -1022,8 +1339,13 @@
             });
 
             // --- Form Submissions ---
-            // Share Story
+            // Share Story (Free)
             document.getElementById('submitStoryBtn').addEventListener('click', () => {
+                if (!publicKey) {
+                    alert('Please connect your Solana wallet to share a story.');
+                    return;
+                }
+
                 const title = document.getElementById('storyTitle').value;
                 const description = document.getElementById('storyDescription').value;
                 const category = document.getElementById('storyCategory').value;
@@ -1036,7 +1358,7 @@
                 db.collection('stories').add({
                     title,
                     description,
-                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : 'Anonymous',
+                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : publicKey.toString(),
                     category,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
@@ -1050,135 +1372,180 @@
                 });
             });
 
-            // Request Help (BackUP)
+            // Request Help (5 BACK)
             document.getElementById('submitRequestBtn').addEventListener('click', () => {
+                if (!publicKey) {
+                    alert('Please connect your Solana wallet to post a request.');
+                    return;
+                }
+
+                if (backTokenBalance < 5) {
+                    alert('You need at least 5 BACK to post a request.');
+                    return;
+                }
+
                 const title = document.getElementById('requestTitle').value;
                 const description = document.getElementById('requestDescription').value;
-                const backNeeded = parseInt(document.getElementById('requestGoal').value);
                 const urgency = document.getElementById('requestUrgency').value;
 
-                if (!title || !description || isNaN(backNeeded)) {
+                if (!title || !description) {
                     alert('Please fill in all fields.');
                     return;
                 }
 
+                // Simulate deducting 5 BACK
+                backTokenBalance -= 5;
+                document.getElementById('backBalance').textContent = `${backTokenBalance} BACK`;
+
                 db.collection('requests').add({
                     title,
                     description,
-                    backNeeded,
-                    backRaised: 0,
                     urgency,
-                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : 'Anonymous',
+                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : publicKey.toString(),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    alert('Request submitted!');
+                    alert('Request posted! 5 BACK deducted from your wallet.');
                     document.getElementById('requestForm').reset();
                     document.querySelector('#createRequestModal .btn-close').click();
                     loadRequests();
                 }).catch((error) => {
                     console.error('Error adding request: ', error);
-                    alert('Error submitting request. Please try again.');
+                    alert('Error posting request. Please try again.');
                 });
             });
 
-            // Add Skill (Skill BACK)
+            // Add Skill (10 BACK)
             document.getElementById('submitSkillBtn').addEventListener('click', () => {
+                if (!publicKey) {
+                    alert('Please connect your Solana wallet to post a skill ad.');
+                    return;
+                }
+
+                if (backTokenBalance < 10) {
+                    alert('You need at least 10 BACK to post a skill ad.');
+                    return;
+                }
+
                 const title = document.getElementById('skillTitle').value;
                 const description = document.getElementById('skillDescription').value;
-                const cost = parseInt(document.getElementById('skillCost').value);
                 const category = document.getElementById('skillCategory').value;
 
-                if (!title || !description || isNaN(cost)) {
+                if (!title || !description || !category) {
                     alert('Please fill in all fields.');
                     return;
                 }
 
+                // Simulate deducting 10 BACK
+                backTokenBalance -= 10;
+                document.getElementById('backBalance').textContent = `${backTokenBalance} BACK`;
+
                 db.collection('skills').add({
                     title,
                     description,
-                    cost,
                     category,
-                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : 'Anonymous',
+                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : publicKey.toString(),
+                    authorWallet: publicKey.toString(),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    alert('Skill added!');
+                    alert('Skill ad posted! 10 BACK deducted from your wallet.');
                     document.getElementById('skillForm').reset();
                     document.querySelector('#addSkillModal .btn-close').click();
                     loadSkills();
                 }).catch((error) => {
                     console.error('Error adding skill: ', error);
-                    alert('Error adding skill. Please try again.');
+                    alert('Error posting skill ad. Please try again.');
                 });
             });
 
-            // Add Item (Switch BACK)
+            // Add Item (10 BACK)
             document.getElementById('submitItemBtn').addEventListener('click', () => {
+                if (!publicKey) {
+                    alert('Please connect your Solana wallet to post an item ad.');
+                    return;
+                }
+
+                if (backTokenBalance < 10) {
+                    alert('You need at least 10 BACK to post an item ad.');
+                    return;
+                }
+
                 const title = document.getElementById('itemTitle').value;
                 const description = document.getElementById('itemDescription').value;
-                const price = parseInt(document.getElementById('itemPrice').value);
                 const category = document.getElementById('itemCategory').value;
                 const image = document.getElementById('itemImage').value;
 
-                if (!title || !description || isNaN(price)) {
+                if (!title || !description || !category) {
                     alert('Please fill in all fields.');
                     return;
                 }
 
+                // Simulate deducting 10 BACK
+                backTokenBalance -= 10;
+                document.getElementById('backBalance').textContent = `${backTokenBalance} BACK`;
+
                 db.collection('items').add({
                     title,
                     description,
-                    price,
                     category,
                     image: image || 'https://via.placeholder.com/300x200?text=No+Image',
-                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : 'Anonymous',
+                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : publicKey.toString(),
+                    authorWallet: publicKey.toString(),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    alert('Item listed!');
+                    alert('Item ad posted! 10 BACK deducted from your wallet.');
                     document.getElementById('itemForm').reset();
                     document.querySelector('#addItemModal .btn-close').click();
                     loadItems();
                 }).catch((error) => {
                     console.error('Error adding item: ', error);
-                    alert('Error listing item. Please try again.');
+                    alert('Error posting item ad. Please try again.');
                 });
             });
 
-            // Add Course (Back to School)
-            document.getElementById('submitCourseBtn').addEventListener('click', () => {
-                const title = document.getElementById('courseTitle').value;
-                const description = document.getElementById('courseDescription').value;
-                const price = parseInt(document.getElementById('coursePrice').value);
-                const category = document.getElementById('courseCategory').value;
-                const image = document.getElementById('courseImage').value;
-                const duration = document.getElementById('courseDuration').value;
-
-                if (!title || !description || isNaN(price) || !category) {
-                    alert('Please fill in all required fields.');
+            // Create Challenge
+            document.getElementById('submitChallengeBtn').addEventListener('click', () => {
+                if (!publicKey) {
+                    alert('Please connect your Solana wallet to create a challenge.');
                     return;
                 }
 
-                db.collection('courses').add({
+                const title = document.getElementById('challengeTitle').value;
+                const description = document.getElementById('challengeDescription').value;
+                const reward = parseInt(document.getElementById('challengeReward').value);
+                const badge = document.getElementById('challengeBadge').value;
+
+                if (!title || !description || isNaN(reward) || !badge) {
+                    alert('Please fill in all fields.');
+                    return;
+                }
+
+                db.collection('challenges').add({
                     title,
                     description,
-                    price,
-                    category,
-                    image: image || 'https://via.placeholder.com/300x200?text=Course+Image',
-                    duration: duration || 'N/A',
-                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : 'Anonymous',
+                    reward,
+                    badge,
+                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : publicKey.toString(),
+                    authorWallet: publicKey.toString(),
+                    participants: [],
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    alert('Course listed!');
-                    document.getElementById('courseForm').reset();
-                    document.querySelector('#addCourseModal .btn-close').click();
-                    loadCourses();
+                    alert('Challenge created!');
+                    document.getElementById('challengeForm').reset();
+                    document.querySelector('#createChallengeModal .btn-close').click();
+                    loadChallenges();
                 }).catch((error) => {
-                    console.error('Error adding course: ', error);
-                    alert('Error listing course. Please try again.');
+                    console.error('Error creating challenge: ', error);
+                    alert('Error creating challenge. Please try again.');
                 });
             });
 
             // Burn BACK
             document.getElementById('submitBurnBtn').addEventListener('click', () => {
+                if (!publicKey) {
+                    alert('Please connect your Solana wallet to burn BACK.');
+                    return;
+                }
+
                 const message = document.getElementById('burnMessage').value;
                 const amount = parseInt(document.getElementById('burnAmount').value);
 
@@ -1187,13 +1554,22 @@
                     return;
                 }
 
+                if (backTokenBalance < amount) {
+                    alert(`You don't have enough BACK to burn ${amount} tokens.`);
+                    return;
+                }
+
+                // Simulate burning BACK
+                backTokenBalance -= amount;
+                document.getElementById('backBalance').textContent = `${backTokenBalance} BACK`;
+
                 db.collection('burns').add({
                     message,
                     amount,
-                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : 'Anonymous',
+                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : publicKey.toString(),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    alert('BACK burned!');
+                    alert(`${amount} BACK burned from your wallet!`);
                     document.getElementById('burnForm').reset();
                     document.querySelector('#addBurnModal .btn-close').click();
                     loadBurns();
@@ -1203,20 +1579,69 @@
                 });
             });
 
+            // Donate to Community Fund
+            document.getElementById('submitDonateBtn').addEventListener('click', () => {
+                if (!publicKey) {
+                    alert('Please connect your Solana wallet to donate.');
+                    return;
+                }
+
+                const amount = parseInt(document.getElementById('donateAmount').value);
+                const message = document.getElementById('donateMessage').value;
+
+                if (isNaN(amount)) {
+                    alert('Please enter a valid BACK amount.');
+                    return;
+                }
+
+                if (backTokenBalance < amount) {
+                    alert(`You don't have enough BACK to donate ${amount} tokens.`);
+                    return;
+                }
+
+                // Simulate donating BACK
+                backTokenBalance -= amount;
+                document.getElementById('backBalance').textContent = `${backTokenBalance} BACK`;
+
+                db.collection('donations').add({
+                    amount,
+                    message: message || 'No message',
+                    author: auth.currentUser ? auth.currentUser.displayName || auth.currentUser.email : publicKey.toString(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    // Update the community fund balance (demo)
+                    const currentFundBalance = parseInt(document.getElementById('fundBalance').textContent) || 0;
+                    document.getElementById('fundBalance').textContent = currentFundBalance + amount;
+
+                    const currentDonors = parseInt(document.getElementById('fundDonors').textContent) || 0;
+                    document.getElementById('fundDonors').textContent = currentDonors + 1;
+
+                    alert(`${amount} BACK donated to the Community Fund!`);
+                    document.getElementById('donateForm').reset();
+                    document.querySelector('#donateModal .btn-close').click();
+                }).catch((error) => {
+                    console.error('Error donating: ', error);
+                    alert('Error donating. Please try again.');
+                });
+            });
+
             // Save Profile
             document.getElementById('saveProfileBtn').addEventListener('click', () => {
-                if (!auth.currentUser) {
-                    alert('Please log in to save your profile.');
+                if (!publicKey && !auth.currentUser) {
+                    alert('Please connect your wallet or log in to save your profile.');
                     return;
                 }
 
                 const username = document.getElementById('editUsername').value;
                 const bio = document.getElementById('editBio').value;
 
-                db.collection('users').doc(auth.currentUser.uid).set({
+                const userId = auth.currentUser ? auth.currentUser.uid : publicKey.toString();
+
+                db.collection('users').doc(userId).set({
                     username: username || 'Guest',
                     bio: bio || 'Share your bio here.',
-                    backBalance: 0,
+                    walletAddress: publicKey ? publicKey.toString() : null,
+                    backBalance: backTokenBalance,
                     badges: [],
                     stories: [],
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -1224,6 +1649,7 @@
                     alert('Profile saved!');
                     document.getElementById('profileUsername').textContent = username || 'Guest';
                     document.getElementById('profileBio').textContent = bio || 'Share your bio here.';
+                    document.getElementById('profileBackBalance').textContent = backTokenBalance;
                     document.getElementById('profileForm').reset();
                     document.querySelector('#editProfileModal .btn-close').click();
                 }).catch((error) => {
@@ -1233,13 +1659,110 @@
             });
 
             // Join Challenge
-            document.getElementById('confirmJoinChallengeBtn').addEventListener('click', () => {
-                if (!auth.currentUser) {
-                    alert('Please log in to join a challenge.');
+            document.querySelectorAll('.join-challenge-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    if (!publicKey) {
+                        alert('Please connect your Solana wallet to join a challenge.');
+                        return;
+                    }
+
+                    const challengeCard = e.target.closest('.challenge-card');
+                    const challengeId = challengeCard.getAttribute('data-challenge-id');
+                    const challengeTitle = challengeCard.querySelector('.card-title').textContent;
+
+                    // In a real app, you would add the user to the challenge's participants list
+                    // and track their progress. For demo purposes, we'll just show a success message.
+                    alert(`You've joined the challenge: ${challengeTitle}. (Demo)`);
+
+                    // Update user's challenges in Firebase
+                    const userId = auth.currentUser ? auth.currentUser.uid : publicKey.toString();
+                    db.collection('users').doc(userId).update({
+                        challenges: firebase.firestore.FieldValue.arrayUnion(challengeId)
+                    }).then(() => {
+                        loadUserData(userId);
+                    });
+                });
+            });
+
+            // Message Author/Creator
+            document.querySelectorAll('.message-author-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    if (!publicKey) {
+                        alert('Please connect your Solana wallet to send a message.');
+                        return;
+                    }
+
+                    const author = button.getAttribute('data-author');
+                    const authorWallet = button.getAttribute('data-author-wallet') || 'BACK Team';
+
+                    // Open messages section and start a new conversation
+                    document.querySelectorAll('[data-section]').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    document.getElementById('messages').classList.add('active');
+                    document.querySelector('[data-section="messages"]').classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                    // Check if conversation already exists
+                    const userId = auth.currentUser ? auth.currentUser.uid : publicKey.toString();
+                    const conversationId = `${userId}_${authorWallet}`;
+
+                    db.collection('conversations').doc(conversationId).get().then((doc) => {
+                        if (!doc.exists) {
+                            // Create new conversation
+                            db.collection('conversations').doc(conversationId).set({
+                                participants: [userId, authorWallet],
+                                messages: [],
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            }).then(() => {
+                                loadMessages();
+                                // Focus on the message input
+                                document.getElementById('messageInput').focus();
+                            });
+                        } else {
+                            // Load existing conversation
+                            loadMessages(conversationId);
+                        }
+                    });
+                });
+            });
+
+            // Send Message
+            document.getElementById('messageForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!publicKey) {
+                    alert('Please connect your Solana wallet to send a message.');
                     return;
                 }
-                alert('Challenge joined! Track your progress in your profile.');
-                document.querySelector('#joinChallengeModal .btn-close').click();
+
+                const messageInput = document.getElementById('messageInput');
+                const message = messageInput.value.trim();
+                if (!message) return;
+
+                const userId = auth.currentUser ? auth.currentUser.uid : publicKey.toString();
+                const activeConversation = document.querySelector('.conversation-active');
+                if (!activeConversation) {
+                    alert('Please select a conversation.');
+                    return;
+                }
+
+                const conversationId = activeConversation.getAttribute('data-conversation-id');
+                const recipient = conversationId.replace(userId, '').replace('_', '');
+
+                db.collection('conversations').doc(conversationId).update({
+                    messages: firebase.firestore.FieldValue.arrayUnion({
+                        sender: userId,
+                        recipient: recipient,
+                        text: message,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    })
+                }).then(() => {
+                    messageInput.value = '';
+                    loadMessages(conversationId);
+                }).catch((error) => {
+                    console.error('Error sending message: ', error);
+                    alert('Error sending message. Please try again.');
+                });
             });
 
             // --- Load Data ---
@@ -1258,12 +1781,18 @@
                                     <h5 class="card-title gold-text">${story.title}</h5>
                                     <p class="card-text">${story.description.substring(0, 100)}...</p>
                                     <p class="card-text"><small class="text-muted">By ${story.author} | ${story.category}</small></p>
-                                    <button class="btn btn-outline-gold btn-sm mt-2">Read More</button>
+                                    <button class="btn btn-outline-gold btn-sm mt-2 message-author-btn"
+                                            data-author="${story.author}"
+                                            data-author-wallet="${story.authorWallet || ''}">
+                                        Message Author
+                                    </button>
                                 </div>
                             </div>
                         `;
                         storiesGrid.appendChild(storyCard);
                     });
+                    // Re-attach event listeners to new buttons
+                    attachMessageButtonListeners();
                 }).catch((error) => {
                     console.error('Error loading stories: ', error);
                 });
@@ -1307,14 +1836,19 @@
                                 <div class="card-body">
                                     <h5 class="card-title gold-text">${skill.title}</h5>
                                     <p class="card-text">${skill.description.substring(0, 100)}...</p>
-                                    <p class="card-text"><strong class="gold-text">Cost:</strong> ${skill.cost} BACK</p>
                                     <p class="card-text"><small class="text-muted">By ${skill.author} | ${skill.category}</small></p>
-                                    <button class="btn btn-outline-gold btn-sm mt-2 w-100">Contact</button>
+                                    <button class="btn btn-outline-gold btn-sm mt-2 w-100 message-author-btn"
+                                            data-author="${skill.author}"
+                                            data-author-wallet="${skill.authorWallet}">
+                                        Message Author
+                                    </button>
                                 </div>
                             </div>
                         `;
                         skillsGrid.appendChild(skillCard);
                     });
+                    // Re-attach event listeners to new buttons
+                    attachMessageButtonListeners();
                 }).catch((error) => {
                     console.error('Error loading skills: ', error);
                 });
@@ -1335,14 +1869,19 @@
                                 <div class="card-body">
                                     <h5 class="card-title gold-text">${item.title}</h5>
                                     <p class="card-text">${item.description.substring(0, 100)}...</p>
-                                    <p class="card-text"><strong class="gold-text">Price:</strong> ${item.price} BACK</p>
                                     <p class="card-text"><small class="text-muted">By ${item.author} | ${item.category}</small></p>
-                                    <button class="btn btn-outline-gold btn-sm mt-2 w-100">Contact Seller</button>
+                                    <button class="btn btn-outline-gold btn-sm mt-2 w-100 message-author-btn"
+                                            data-author="${item.author}"
+                                            data-author-wallet="${item.authorWallet}">
+                                        Message Seller
+                                    </button>
                                 </div>
                             </div>
                         `;
                         itemsGrid.appendChild(itemCard);
                     });
+                    // Re-attach event listeners to new buttons
+                    attachMessageButtonListeners();
                 }).catch((error) => {
                     console.error('Error loading items: ', error);
                 });
@@ -1365,55 +1904,75 @@
                                         <span class="badge">${request.urgency}</span>
                                     </div>
                                     <p class="card-text">${request.description.substring(0, 100)}...</p>
-                                    <div class="d-flex justify-content-between text-small mb-3">
-                                        <span><strong class="gold-text">Needed:</strong> ${request.backNeeded} BACK</span>
-                                        <span><strong class="gold-text">Raised:</strong> ${request.backRaised || 0} BACK</span>
-                                    </div>
                                     <p class="card-text"><small class="text-muted">By ${request.author}</small></p>
-                                    <button class="btn btn-outline-gold btn-sm mt-2 w-100">Donate BACK</button>
+                                    <button class="btn btn-outline-gold btn-sm mt-2 w-100 message-author-btn"
+                                            data-author="${request.author}"
+                                            data-author-wallet="${request.authorWallet || ''}">
+                                        Message Author
+                                    </button>
                                 </div>
                             </div>
                         `;
                         requestsGrid.appendChild(requestCard);
                     });
+                    // Re-attach event listeners to new buttons
+                    attachMessageButtonListeners();
                 }).catch((error) => {
                     console.error('Error loading requests: ', error);
                 });
             }
 
-            // Load Courses (Back to School)
-            function loadCourses() {
-                db.collection('courses').orderBy('timestamp', 'desc').get().then((querySnapshot) => {
-                    const coursesGrid = document.getElementById('coursesGrid');
-                    coursesGrid.innerHTML = '';
+            // Load Challenges
+            function loadChallenges() {
+                db.collection('challenges').orderBy('timestamp', 'desc').get().then((querySnapshot) => {
+                    const challengesGrid = document.getElementById('challengesGrid');
+                    // Keep pre-made challenges and add custom ones
                     querySnapshot.forEach((doc) => {
-                        const course = doc.data();
-                        const courseCard = document.createElement('div');
-                        courseCard.className = 'col-md-4 mb-4';
-                        courseCard.setAttribute('data-category', course.category);
-                        courseCard.innerHTML = `
-                            <div class="card h-100">
-                                <img src="${course.image}" class="card-img-top" alt="${course.title}" style="height: 200px; object-fit: cover;">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <h5 class="card-title gold-text mb-0">${course.title}</h5>
-                                        <span class="badge">${course.category}</span>
-                                    </div>
-                                    <p class="card-text">${course.description.substring(0, 100)}...</p>
-                                    <div class="d-flex justify-content-between align-items-center mt-3">
-                                        <span class="gold-text fw-bold">Price: ${course.price} BACK</span>
-                                        <span class="text-muted small">By ${course.author}</span>
-                                    </div>
-                                    <button class="btn btn-outline-gold btn-sm mt-3 w-100">Enroll Now</button>
+                        const challenge = doc.data();
+                        const challengeCard = document.createElement('div');
+                        challengeCard.className = 'col-md-4 mb-4';
+                        challengeCard.innerHTML = `
+                            <div class="card h-100 challenge-card" data-challenge-id="${doc.id}">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title gold-text">${challenge.title}</h5>
+                                    <p class="card-text">${challenge.description.substring(0, 100)}...</p>
+                                    <p class="card-text"><strong class="gold-text">Reward:</strong> ${challenge.reward} BACK + ${challenge.badge}</p>
+                                    <button class="btn btn-gold mt-3 join-challenge-btn">Join Challenge</button>
+                                    <button class="btn btn-outline-gold mt-2 w-100 message-author-btn"
+                                            data-author="${challenge.author}"
+                                            data-author-wallet="${challenge.authorWallet}">
+                                        Message Creator
+                                    </button>
                                 </div>
                             </div>
                         `;
-                        coursesGrid.appendChild(courseCard);
+                        challengesGrid.appendChild(challengeCard);
                     });
-                    // Apply filters after loading
-                    applyCourseFilters();
+                    // Re-attach event listeners to new buttons
+                    document.querySelectorAll('.join-challenge-btn').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            if (!publicKey) {
+                                alert('Please connect your Solana wallet to join a challenge.');
+                                return;
+                            }
+
+                            const challengeCard = e.target.closest('.challenge-card');
+                            const challengeId = challengeCard.getAttribute('data-challenge-id');
+                            const challengeTitle = challengeCard.querySelector('.card-title').textContent;
+
+                            alert(`You've joined the challenge: ${challengeTitle}. (Demo)`);
+
+                            const userId = auth.currentUser ? auth.currentUser.uid : publicKey.toString();
+                            db.collection('users').doc(userId).update({
+                                challenges: firebase.firestore.FieldValue.arrayUnion(challengeId)
+                            }).then(() => {
+                                loadUserData(userId);
+                            });
+                        });
+                    });
+                    attachMessageButtonListeners();
                 }).catch((error) => {
-                    console.error('Error loading courses: ', error);
+                    console.error('Error loading challenges: ', error);
                 });
             }
 
@@ -1428,7 +1987,7 @@
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td class="gold-text">${rank++}</td>
-                            <td>${user.username || 'Anonymous'}</td>
+                            <td>${user.username || user.walletAddress || 'Anonymous'}</td>
                             <td class="gold-text">${user.backBalance || 0}</td>
                             <td>${user.badges ? user.badges.length : 0}</td>
                             <td>${user.stories ? user.stories.length : 0}</td>
@@ -1441,6 +2000,83 @@
                 });
             }
 
+            // Load Messages
+            function loadMessages(conversationId = null) {
+                const userId = auth.currentUser ? auth.currentUser.uid : publicKey ? publicKey.toString() : null;
+                if (!userId) {
+                    document.getElementById('conversationsList').innerHTML = '<p class="text-muted">Connect your wallet to view messages.</p>';
+                    return;
+                }
+
+                // Load conversations
+                db.collection('conversations')
+                    .where('participants', 'array-contains', userId)
+                    .orderBy('timestamp', 'desc')
+                    .get().then((querySnapshot) => {
+                    const conversationsList = document.getElementById('conversationsList');
+                    conversationsList.innerHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const conversation = doc.data();
+                        const otherParticipant = conversation.participants.find(p => p !== userId);
+                        const conversationItem = document.createElement('a');
+                        conversationItem.href = '#';
+                        conversationItem.className = 'list-group-item list-group-item-action bg-dark text-light border-gold';
+                        conversationItem.setAttribute('data-conversation-id', doc.id);
+                        conversationItem.innerHTML = `
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1 gold-text">${otherParticipant}</h6>
+                                <small class="text-muted">${conversation.timestamp ? conversation.timestamp.toDate().toLocaleDateString() : 'N/A'}</small>
+                            </div>
+                            <p class="mb-1">${conversation.messages.length > 0 ?
+                                conversation.messages[conversation.messages.length - 1].text.substring(0, 50) + '...' :
+                                'No messages yet'}</p>
+                        `;
+                        conversationsList.appendChild(conversationItem);
+
+                        // Add click event to load messages
+                        conversationItem.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const conversationId = conversationItem.getAttribute('data-conversation-id');
+                            loadMessages(conversationId);
+                        });
+                    });
+
+                    // Load messages for the selected conversation
+                    if (conversationId) {
+                        db.collection('conversations').doc(conversationId).get().then((doc) => {
+                            if (doc.exists) {
+                                const conversation = doc.data();
+                                const messagesContainer = document.getElementById('messagesContainer');
+                                messagesContainer.innerHTML = '';
+
+                                // Mark conversation as active
+                                document.querySelectorAll('.list-group-item').forEach(item => {
+                                    item.classList.remove('active', 'conversation-active');
+                                });
+                                document.querySelector(`[data-conversation-id="${conversationId}"]`).classList.add('active', 'conversation-active');
+
+                                conversation.messages.forEach(message => {
+                                    const messageDiv = document.createElement('div');
+                                    messageDiv.className = `message ${message.sender === userId ? 'sent' : 'received'}`;
+                                    messageDiv.innerHTML = `
+                                        <p>${message.text}</p>
+                                        <div class="message-meta">
+                                            ${message.sender === userId ? 'You' : 'Them'} | ${message.timestamp ? message.timestamp.toDate().toLocaleTimeString() : 'N/A'}
+                                        </div>
+                                    `;
+                                    messagesContainer.appendChild(messageDiv);
+                                });
+
+                                // Scroll to bottom
+                                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                            }
+                        });
+                    }
+                }).catch((error) => {
+                    console.error('Error loading messages: ', error);
+                });
+            }
+
             // Load User Data
             function loadUserData(uid) {
                 db.collection('users').doc(uid).get().then((doc) => {
@@ -1448,36 +2084,95 @@
                         const userData = doc.data();
                         document.getElementById('profileUsername').textContent = userData.username || 'Guest';
                         document.getElementById('profileBio').textContent = userData.bio || 'Share your bio here.';
-                        document.getElementById('profileBackBalance').textContent = userData.backBalance || 0;
+                        document.getElementById('profileBackBalance').textContent = userData.backBalance || backTokenBalance || 0;
                         document.getElementById('profileBadgesCount').textContent = userData.badges ? userData.badges.length : 0;
                         document.getElementById('profileStoriesCount').textContent = userData.stories ? userData.stories.length : 0;
+
+                        // Load user's challenges
+                        const challengesList = document.getElementById('profileChallengesList');
+                        challengesList.innerHTML = '';
+                        if (userData.challenges && userData.challenges.length > 0) {
+                            userData.challenges.forEach(challengeId => {
+                                db.collection('challenges').doc(challengeId).get().then((challengeDoc) => {
+                                    if (challengeDoc.exists) {
+                                        const challenge = challengeDoc.data();
+                                        const challengeItem = document.createElement('div');
+                                        challengeItem.className = 'col-md-4 mb-2';
+                                        challengeItem.innerHTML = `
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h6 class="card-title gold-text">${challenge.title}</h6>
+                                                    <p class="card-text small">${challenge.description.substring(0, 50)}...</p>
+                                                </div>
+                                            </div>
+                                        `;
+                                        challengesList.appendChild(challengeItem);
+                                    }
+                                });
+                            });
+                        } else {
+                            challengesList.innerHTML = '<p class="text-muted">No challenges joined yet.</p>';
+                        }
                     }
                 }).catch((error) => {
                     console.error('Error loading user data: ', error);
                 });
             }
 
-            // Filter Courses by Category
-            function applyCourseFilters() {
-                const filterButtons = document.querySelectorAll('#back-to-school [data-filter]');
-                const courses = document.querySelectorAll('#coursesGrid [data-category]');
+            // Helper function to attach message button listeners
+            function attachMessageButtonListeners() {
+                document.querySelectorAll('.message-author-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        if (!publicKey) {
+                            alert('Please connect your Solana wallet to send a message.');
+                            return;
+                        }
 
-                filterButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        filterButtons.forEach(btn => btn.classList.remove('active'));
-                        button.classList.add('active');
-                        const filter = button.getAttribute('data-filter');
+                        const author = button.getAttribute('data-author');
+                        const authorWallet = button.getAttribute('data-author-wallet') || 'BACK Team';
 
-                        courses.forEach(course => {
-                            if (filter === 'all' || course.getAttribute('data-category') === filter) {
-                                course.style.display = 'block';
+                        // Open messages section and start a new conversation
+                        document.querySelectorAll('[data-section]').forEach(link => {
+                            link.classList.remove('active');
+                        });
+                        document.getElementById('messages').classList.add('active');
+                        document.querySelector('[data-section="messages"]').classList.add('active');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                        // Check if conversation already exists
+                        const userId = auth.currentUser ? auth.currentUser.uid : publicKey.toString();
+                        const conversationId = `${userId}_${authorWallet}`;
+
+                        db.collection('conversations').doc(conversationId).get().then((doc) => {
+                            if (!doc.exists) {
+                                // Create new conversation
+                                db.collection('conversations').doc(conversationId).set({
+                                    participants: [userId, authorWallet],
+                                    messages: [],
+                                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                                }).then(() => {
+                                    loadMessages(conversationId);
+                                    // Focus on the message input
+                                    document.getElementById('messageInput').focus();
+                                });
                             } else {
-                                course.style.display = 'none';
+                                // Load existing conversation
+                                loadMessages(conversationId);
                             }
                         });
                     });
                 });
             }
+
+            // Show all challenges button
+            document.getElementById('showAllChallengesBtn').addEventListener('click', () => {
+                document.querySelectorAll('[data-section]').forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.getElementById('back-in-30').classList.add('active');
+                document.querySelector('[data-section="back-in-30"]').classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
     </script>
 </body>
